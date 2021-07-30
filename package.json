@@ -3,7 +3,7 @@
   "name": "express-login-example",
   "scripts": {
     "lint": "eslint .",
-    "start": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server"
   },
   "dependencies": {
     "express": "^4.17.1"
