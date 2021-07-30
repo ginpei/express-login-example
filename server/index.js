@@ -20,12 +20,12 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   /** @type {Partial<{
-   *   account: string;
+   *   userName: string;
    *   password: string;
    * }>} */
-  const { account, password } = req.body;
+  const { userName, password } = req.body;
 
-  if (!account || !password) {
+  if (!userName || !password) {
     res.status(400);
     res.render("error.ejs", {
       messages: ["Account and password are required"],
