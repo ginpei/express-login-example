@@ -8,4 +8,7 @@ app.get("/", (req, res) => {
   res.json({ ok: true });
 });
 
-app.listen(port, () => console.log("Port", port));
+app.listen(port, () => {
+  // eslint-disable-next-line no-console
+  console.log("Port", port);
+});

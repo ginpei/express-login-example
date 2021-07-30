@@ -6,4 +6,12 @@ module.exports = {
   rules: {
     // your rules here
   },
+  overrides: [
+    {
+      files: "*.js",
+      rules: {
+        "@typescript-eslint/no-var-requires": "off",
+      },
+    },
+  ],
 };
