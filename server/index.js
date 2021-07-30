@@ -1,6 +1,7 @@
 const express = require("express");
 const { resolve } = require("path");
 const { urlencoded } = require("body-parser");
+const { getUserByUserName, certifyByPassword } = require("./fake");
 
 const port = 3000;
 const staticPath = resolve(__dirname, "../public");
@@ -28,11 +29,22 @@ app.post("/login", (req, res) => {
   if (!userName || !password) {
     res.status(400);
     res.render("error.ejs", {
-      messages: ["Account and password are required"],
+      messages: ["User name and password are required"],
     });
     return;
   }
 
+  const user = getUserByUserName(userName);
+  const correct = certifyByPassword(user.id, password);
+  if (!correct) {
+    res.status(401);
+    res.render("error.ejs", {
+      messages: ["Pair of user name and password are not correctj"],
+    });
+    return;
+  }
+
+  // WIP
   res.status(500);
   res.json({ ok: false, message: "Not implemented" });
 });
