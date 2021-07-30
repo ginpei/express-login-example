@@ -66,6 +66,14 @@ module.exports = {
   },
 
   /**
+   * @param {string} sessionId
+   * @returns {void}
+   */
+  deleteSession(sessionId) {
+    lSessions.delete(sessionId);
+  },
+
+  /**
    * @param {string} id
    * @returns {Session | null}
    */

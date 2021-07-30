@@ -9,6 +9,7 @@ const {
   getUser,
   getUserByUserName,
   saveSession,
+  deleteSession,
 } = require("./fake");
 
 const port = 3000;
@@ -21,17 +22,7 @@ app.use(express.static(staticPath));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  /** @type {import("./fake").User | null} */
-  let loginUser = null;
-
-  const sessionId = req.cookies.sid;
-  if (typeof sessionId === "string") {
-    const session = getSession(sessionId);
-    if (session) {
-      const user = getUser(session.userId);
-      loginUser = user;
-    }
-  }
+  const loginUser = getLoginUser(req);
 
   res.render("index.ejs", { loginUser });
 });
@@ -72,7 +63,50 @@ app.post("/login", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/logout", (req, res) => {
+  const loginUser = getLoginUser(req);
+
+  res.render("logout/index.ejs", { loginUser });
+});
+
+app.post("/logout", (req, res) => {
+  const sessionId = getSessionId(req);
+  if (sessionId) {
+    deleteSession(sessionId);
+    res.cookie("sid", null);
+  }
+
+  res.redirect("/");
+});
+
 app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log("Port", port);
 });
+
+/**
+ * @param {import("express").Request} req
+ */
+function getLoginUser(req) {
+  const sessionId = getSessionId(req);
+
+  const session = getSession(sessionId);
+  if (!session) {
+    return null;
+  }
+
+  const user = getUser(session.userId);
+  return user;
+}
+
+/**
+ * @param {import("express").Request} req
+ */
+function getSessionId(req) {
+  const sessionId = req.cookies.sid;
+  if (!(typeof sessionId === "string")) {
+    return "";
+  }
+
+  return sessionId;
+}
