@@ -24,7 +24,7 @@ app.post("/login", (req, res) => {
 
   if (!account || !password) {
     res.status(400);
-    res.render("login/error.ejs", {
+    res.render("error.ejs", {
       messages: ["Account and password are required"],
     });
     return;
