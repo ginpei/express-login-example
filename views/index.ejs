@@ -10,6 +10,9 @@
 <body>
   <div class="u-container">
     <h1>Yo</h1>
+    <% if (loginUser) { %>
+      <p>Welcome back <%= loginUser.userName %>!</p>
+    <% } %>
     <p>
       <a href="/login/">Log in</a>
     </p>

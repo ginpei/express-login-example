@@ -5,7 +5,25 @@
  * }} User
  */
 
+/**
+ * @typedef {{
+ *   id: string;
+ *   userId: string | undefined;
+ * }} Session
+ */
+
+/** @type {Map<string, Session>} */
+const lSessions = new Map();
+
 module.exports = {
+  /**
+   * @param {string} id
+   * @returns {User}
+   */
+  getUser(id) {
+    return { userName: id, id };
+  },
+
   /**
    * @param {string} userName
    * @returns {User}
@@ -27,4 +45,36 @@ module.exports = {
     const correctPassword = certMap[userId];
     return correctPassword && correctPassword === password;
   },
+
+  /**
+   * @param {string | undefined} userId
+   * @returns {Session}
+   */
+  createSession(userId) {
+    return {
+      id: generateId(),
+      userId,
+    };
+  },
+
+  /**
+   * @param {Session} session
+   * @returns {void}
+   */
+  saveSession(session) {
+    lSessions.set(session.id, session);
+  },
+
+  /**
+   * @param {string} id
+   * @returns {Session | null}
+   */
+  getSession(id) {
+    const session = lSessions.get(id) ?? null;
+    return session;
+  },
 };
+
+function generateId() {
+  return Math.random().toFixed(32).slice(2);
+}

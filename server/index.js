@@ -1,7 +1,15 @@
 const express = require("express");
 const { resolve } = require("path");
 const { urlencoded } = require("body-parser");
-const { getUserByUserName, certifyByPassword } = require("./fake");
+const cookieParser = require("cookie-parser");
+const {
+  certifyByPassword,
+  createSession,
+  getSession,
+  getUser,
+  getUserByUserName,
+  saveSession,
+} = require("./fake");
 
 const port = 3000;
 const staticPath = resolve(__dirname, "../public");
@@ -10,9 +18,22 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(urlencoded({ extended: true }));
 app.use(express.static(staticPath));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  /** @type {import("./fake").User | null} */
+  let loginUser = null;
+
+  const sessionId = req.cookies.sid;
+  if (typeof sessionId === "string") {
+    const session = getSession(sessionId);
+    if (session) {
+      const user = getUser(session.userId);
+      loginUser = user;
+    }
+  }
+
+  res.render("index.ejs", { loginUser });
 });
 
 app.get("/login", (req, res) => {
@@ -44,9 +65,11 @@ app.post("/login", (req, res) => {
     return;
   }
 
-  // WIP
-  res.status(500);
-  res.json({ ok: false, message: "Not implemented" });
+  const session = createSession(user.id);
+  saveSession(session);
+
+  res.cookie("sid", session.id);
+  res.redirect("/");
 });
 
 app.listen(port, () => {

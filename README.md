@@ -110,3 +110,26 @@ app.post("/postMessage", (req, res) => {
   res.json({ ok: true, message: `Received: ${message}` });
 });
 ```
+
+## Set and get cookies
+
+To set cookie, use `res.cookie()`.
+
+```js
+res.cookie("sid", session.id);
+```
+
+To read cookie, set up cookie parser, and use `req.cookies`.
+
+```console
+$ npm install cookie-parser
+```
+
+```js
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+```
+
+```js
+const sessionId = req.cookies.sid;
+```
