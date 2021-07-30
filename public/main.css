@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+}
+
+.u-container {
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+  min-width: 320px;
+  width: min(100%, 800px);
+}

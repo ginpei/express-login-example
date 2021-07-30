@@ -1,11 +1,14 @@
 const express = require("express");
+const { resolve } = require("path");
 const { urlencoded } = require("body-parser");
 
 const port = 3000;
+const staticPath = resolve(__dirname, "../public");
 
 const app = express();
 app.set("view engine", "ejs");
 app.use(urlencoded({ extended: true }));
+app.use(express.static(staticPath));
 
 app.get("/", (req, res) => {
   res.render("index.ejs");

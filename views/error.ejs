@@ -4,14 +4,17 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/main.css">
   <title>Error</title>
 </head>
 <body>
-  <h1>Error</h1>
-  <ul>
-    <% messages.forEach((message) => { %>
-      <li><%= message %></li>
-    <% }) %>
-  </ul>
+  <div class="u-container">
+    <h1>Error</h1>
+    <ul>
+      <% messages.forEach((message) => { %>
+        <li><%= message %></li>
+      <% }) %>
+    </ul>
+  </div>
 </body>
 </html>

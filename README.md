@@ -58,6 +58,25 @@ app.get("/", (req, res) => {
 
 Note the template file path in the first parameter is relative from `<project-root>/views/`.
 
+## Static files
+
+While a web server renders an HTML document dynamically, files like CSS are static (not changed).
+
+Let's say this JS file is located under `<project-root>/public/`, and static files are under `<project-root>/public/`.
+
+```js
+const { resolve } = require("path");
+
+const staticPath = resolve(__dirname, "../public");
+app.use(express.static(staticPath));
+```
+
+Now you can access to the file `<project-root>/public/main.css` by the URL path `/main.css`.
+
+```html
+<link rel="stylesheet" href="/main.css">
+```
+
 ## Receive form inputs
 
 To receive data from client, use `body-parser`. (Because Express depends on it, you can ommit obvious installation if you want.)
