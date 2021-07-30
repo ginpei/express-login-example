@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "name": "express-login-example",
+  "scripts": {
+    "start": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
