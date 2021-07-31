@@ -49,8 +49,8 @@ app.post("/login", (req, res) => {
   }
 
   const user = getUserByUserName(userName);
-  const correct = certifyByPassword(user.id, password);
-  if (!correct) {
+  const correct = user && certifyByPassword(user.id, password);
+  if (!user || !correct) {
     res.status(401);
     res.render("error.ejs", {
       messages: ["Pair of user name and password are not correctj"],
@@ -93,7 +93,7 @@ function getLoginUser(req) {
   const sessionId = getSessionId(req);
 
   const session = getSession(sessionId);
-  if (!session) {
+  if (!session || !session.userId) {
     return null;
   }
 

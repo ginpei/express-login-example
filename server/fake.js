@@ -81,6 +81,9 @@ module.exports = {
     const creds = Array.from(fakeUserCredentialDatabase.values());
     const cred = creds[Math.floor(Math.random() * creds.length)];
     const user = module.exports.getUser(cred.userId);
+    if (!user) {
+      throw new Error("Failed to get random user");
+    }
     const loginCred = { userName: user.userName, password: cred.password };
     return loginCred;
   },
