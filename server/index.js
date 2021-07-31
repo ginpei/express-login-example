@@ -10,6 +10,7 @@ const {
   getUserByUserName,
   saveSession,
   deleteSession,
+  getRandomUserCredential,
 } = require("./fake");
 
 const port = 3000;
@@ -28,7 +29,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login/index.ejs");
+  const { userName, password } = getRandomUserCredential();
+  res.render("login/index.ejs", { userName, password });
 });
 
 app.post("/login", (req, res) => {

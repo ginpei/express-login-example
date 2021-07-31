@@ -21,9 +21,9 @@
 
 /** @type {Map<string, User>} */
 const fakeUserDatabase = new Map([
-  ["user-001", { id: "user-001", userName: "ginpei" }],
-  ["user-002", { id: "user-002", userName: "alice" }],
-  ["user-003", { id: "user-003", userName: "bob" }],
+  ["user-001", { id: "user-001", userName: "alice" }],
+  ["user-002", { id: "user-002", userName: "bob" }],
+  ["user-003", { id: "user-003", userName: "charlie" }],
 ]);
 
 /** @type {Map<string, UserCredential>} */
@@ -72,6 +72,17 @@ module.exports = {
     }
 
     return cred.password === password;
+  },
+
+  /**
+   * @returns {{ userName: string; password: string }}
+   */
+  getRandomUserCredential() {
+    const creds = Array.from(fakeUserCredentialDatabase.values());
+    const cred = creds[Math.floor(Math.random() * creds.length)];
+    const user = module.exports.getUser(cred.userId);
+    const loginCred = { userName: user.userName, password: cred.password };
+    return loginCred;
   },
 
   /**
