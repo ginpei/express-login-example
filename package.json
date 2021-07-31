@@ -2,7 +2,9 @@
   "private": true,
   "name": "express-login-example",
   "scripts": {
-    "lint": "eslint .",
+    "lint:js": "eslint .",
+    "lint:type": "tsc",
+    "lint": "npm run lint:type && npm run lint:js && echo OK",
     "start": "node server"
   },
   "dependencies": {
