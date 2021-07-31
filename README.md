@@ -22,7 +22,7 @@ app.listen(port, () => {
 });
 ```
 
-Run it, and open `http://localhost:3000/` to see `{ ok: true }` in browser.
+Run it, and open `http://localhost:3000/` to see `{ ok: true }` in a browser. (It's not HTML yet.)
 
 ## Routing
 
@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 
 ## Render HTML
 
-Express requires a view engine to render HTML. Here We're going to choose [ejs](https://github.com/tj/ejs).
+Express requires a view engine to render HTML. Here we're going to choose one named [ejs](https://github.com/tj/ejs).
 
 ```console
 $ npm install ejs
@@ -48,7 +48,7 @@ $ npm install ejs
 app.set("view engine", "ejs");
 ```
 
-Create a template HTML with `.ejs` extension under `views/` directory. (`<project-root>/views/index.ejs`) Then use `res.render()` to render the result HTML using the template.
+Create a template HTML with `.ejs` extension under `views/` directory (`<project-root>/views/index.ejs`). Then use `res.render()` to render the result HTML using the template.
 
 ```js
 app.get("/", (req, res) => {
@@ -56,22 +56,34 @@ app.get("/", (req, res) => {
 });
 ```
 
-Note the template file path in the first parameter is relative from `<project-root>/views/`.
+Note the template file path in the first parameter is relative to `<project-root>/views/`.
+
+Give dynamic values to ejs as the second parameter of `app.render()`, and write `<%= xxx %>` to let the template print the value.
+
+```js
+res.render("index.ejs", { message: "Hello World!" });
+```
+
+```html
+<h1><%= message %></h1>
+```
 
 ## Static files
 
 While a web server renders an HTML document dynamically, files like CSS are static (not changed).
 
-Let's say this JS file is located under `<project-root>/public/`, and static files are under `<project-root>/public/`.
+To let express server publish those files, use `express.static()` and `app.use()`. Let's say this server `index.js` file is located under `<project-root>/server/`, and static files are under `<project-root>/public/`.
 
 ```js
 const { resolve } = require("path");
+
+…
 
 const staticPath = resolve(__dirname, "../public");
 app.use(express.static(staticPath));
 ```
 
-Now you can access to the file `<project-root>/public/main.css` by the URL path `/main.css`.
+You can now access the file `<project-root>/public/main.css` by the URL path `/main.css`.
 
 ```html
 <link rel="stylesheet" href="/main.css">
@@ -79,7 +91,7 @@ Now you can access to the file `<project-root>/public/main.css` by the URL path 
 
 ## Receive form inputs
 
-To receive data from client, use `body-parser`. (Because Express depends on it, you can ommit obvious installation if you want.)
+To receive data from the client-side, use `body-parser` middleware. (You can omit explicit installation if you want because express depends on it.)
 
 ```console
 $ npm install body-parser
@@ -92,6 +104,8 @@ const { urlencoded } = require("body-parser");
 
 app.use(urlencoded({ extended: true }));
 ```
+
+Now you can get sent values over `req.body`.
 
 ```html
 <form action="/postMessage" method="POST">
@@ -113,13 +127,7 @@ app.post("/postMessage", (req, res) => {
 
 ## Set and get cookies
 
-To set cookie, use `res.cookie()`.
-
-```js
-res.cookie("sid", session.id);
-```
-
-To read cookie, set up cookie parser, and use `req.cookies`.
+To manage HTTP [cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies), use `cookie-parser` middleware.
 
 ```console
 $ npm install cookie-parser
@@ -130,6 +138,26 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 ```
 
+To write cookie, use `res.cookie()`.
+
+```js
+res.cookie("sid", session.id);
+```
+
+To read the cookie, use `req.cookies`.
+
 ```js
 const sessionId = req.cookies.sid;
 ```
+
+If you want to see, delete, manage cookies on your browser, open a web browser's DevTools (most likely `Ctrl+Shift+I`), and navigate yourself to > Application > Storage > Cookies.
+
+## And more...
+
+- Cookies can have some options like expiration
+- Routing code can be extracted into files
+- It would be better to show the login page again if failed
+- You can create a login system using a pattern called session using cookies
+- Please try to learn but never use your own login mechanism. It must be insecure
+
+Find more on the web. Enjoy!
