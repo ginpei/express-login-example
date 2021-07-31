@@ -7,29 +7,57 @@
 
 /**
  * @typedef {{
+ *   userId: string;
+ *   password: string;
+ * }} UserCredential
+ */
+
+/**
+ * @typedef {{
  *   id: string;
  *   userId: string | undefined;
  * }} Session
  */
 
+/** @type {Map<string, User>} */
+const fakeUserDatabase = new Map([
+  ["user-001", { id: "user-001", userName: "ginpei" }],
+  ["user-002", { id: "user-002", userName: "alice" }],
+  ["user-003", { id: "user-003", userName: "bob" }],
+]);
+
+/** @type {Map<string, UserCredential>} */
+const fakeUserCredentialDatabase = new Map([
+  ["user-001", { userId: "user-001", password: "123456" }],
+  ["user-002", { userId: "user-002", password: "123456789" }],
+  ["user-003", { userId: "user-003", password: "qwerty" }],
+]);
+
 /** @type {Map<string, Session>} */
-const lSessions = new Map();
+const fakeSessions = new Map();
 
 module.exports = {
   /**
    * @param {string} id
-   * @returns {User}
+   * @returns {User | null}
    */
   getUser(id) {
-    return { userName: id, id };
+    return fakeUserDatabase.get(id) ?? null;
   },
 
   /**
    * @param {string} userName
-   * @returns {User}
+   * @returns {User | null}
    */
   getUserByUserName(userName) {
-    return { userName, id: userName };
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [, user] of fakeUserDatabase) {
+      if (user.userName === userName) {
+        return user;
+      }
+    }
+
+    return null;
   },
 
   /**
@@ -38,12 +66,12 @@ module.exports = {
    * @returns {boolean}
    */
   certifyByPassword(userId, password) {
-    const certMap = {
-      ginpei: "123456",
-    };
+    const cred = fakeUserCredentialDatabase.get(userId);
+    if (!cred) {
+      return false;
+    }
 
-    const correctPassword = certMap[userId];
-    return correctPassword && correctPassword === password;
+    return cred.password === password;
   },
 
   /**
@@ -62,7 +90,7 @@ module.exports = {
    * @returns {void}
    */
   saveSession(session) {
-    lSessions.set(session.id, session);
+    fakeSessions.set(session.id, session);
   },
 
   /**
@@ -70,7 +98,7 @@ module.exports = {
    * @returns {void}
    */
   deleteSession(sessionId) {
-    lSessions.delete(sessionId);
+    fakeSessions.delete(sessionId);
   },
 
   /**
@@ -78,7 +106,7 @@ module.exports = {
    * @returns {Session | null}
    */
   getSession(id) {
-    const session = lSessions.get(id) ?? null;
+    const session = fakeSessions.get(id) ?? null;
     return session;
   },
 };
