@@ -13,14 +13,19 @@ const {
   getRandomUserCredential,
 } = require("./fake");
 
+// static values
 const port = 3000;
 const staticPath = resolve(__dirname, "../public");
 
+// set up express with middleware
 const app = express();
 app.set("view engine", "ejs");
 app.use(urlencoded({ extended: true }));
 app.use(express.static(staticPath));
 app.use(cookieParser());
+
+// ----------------------------------------------------------------
+// routings and controllers
 
 app.get("/", (req, res) => {
   const loginUser = getLoginUser(req);
@@ -81,10 +86,16 @@ app.post("/logout", (req, res) => {
   res.redirect("/");
 });
 
+// ----------------------------------------------------------------
+
+// get started!
 app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log("Port", port);
 });
+
+// ----------------------------------------------------------------
+// misc
 
 /**
  * @param {import("express").Request} req
