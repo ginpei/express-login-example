@@ -1,5 +1,14 @@
 # express-login-example
 
+## Try
+
+```console
+$ npm ci
+$ npm start
+```
+
+Press `Ctrl+C` to stop.
+
 ## Set up server
 
 ```console
