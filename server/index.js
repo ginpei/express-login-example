@@ -1,7 +1,6 @@
 const express = require("express");
 const { resolve } = require("path");
 const { urlencoded } = require("body-parser");
-const cookieParser = require("cookie-parser");
 const {
   certifyByPassword,
   createSession,
@@ -22,7 +21,6 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(urlencoded({ extended: true }));
 app.use(express.static(staticPath));
-app.use(cookieParser());
 
 // ----------------------------------------------------------------
 // routings and controllers
@@ -66,7 +64,7 @@ app.post("/login", (req, res) => {
   const session = createSession(user.id);
   saveSession(session);
 
-  res.cookie("sid", session.id);
+  res.setHeader("Set-Cookie", `sid=${session.id}`);
   res.redirect("/");
 });
 
@@ -116,7 +114,10 @@ function getLoginUser(req) {
  * @param {import("express").Request} req
  */
 function getSessionId(req) {
-  const sessionId = req.cookies.sid;
+  const sessionId = req.headers.cookie
+    ?.split("; ")
+    .find((v) => v.startsWith("sid="))
+    ?.slice("sid=".length);
   if (!(typeof sessionId === "string")) {
     return "";
   }
