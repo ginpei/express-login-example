@@ -64,7 +64,7 @@ app.post("/login", (req, res) => {
   const session = createSession(user.id);
   saveSession(session);
 
-  res.setHeader("Set-Cookie", `sid=${session.id}`);
+  setSessionId(res, session.id);
   res.redirect("/");
 });
 
@@ -78,7 +78,7 @@ app.post("/logout", (req, res) => {
   const sessionId = getSessionId(req);
   if (sessionId) {
     deleteSession(sessionId);
-    res.cookie("sid", null);
+    setSessionId(res, "");
   }
 
   res.redirect("/");
@@ -123,4 +123,12 @@ function getSessionId(req) {
   }
 
   return sessionId;
+}
+
+/**
+ * @param {import("express").Response} res
+ * @param {string} sessionId
+ */
+function setSessionId(res, sessionId) {
+  res.setHeader("Set-Cookie", `sid=${sessionId}`);
 }
