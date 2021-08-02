@@ -111,6 +111,7 @@ function getLoginUser(req) {
 }
 
 /**
+ * You should use cookie-parser and `req.cookies.sid` instead.
  * @param {import("express").Request} req
  */
 function getSessionId(req) {
@@ -126,6 +127,7 @@ function getSessionId(req) {
 }
 
 /**
+ * You should use cookie-parser and `res.cookie("sid", sessionId)` instead.
  * @param {import("express").Response} res
  * @param {string} sessionId
  */
